@@ -6,8 +6,8 @@
 
 В GHCR публикуются два target-образа из одного `Dockerfile`:
 
-- `ghcr.io/<owner>/symfony-rr:8.4-prod`
-- `ghcr.io/<owner>/symfony-rr:8.4-dev`
+- `ghcr.io/astro-masters/symfony-rr:8.4-prod`
+- `ghcr.io/astro-masters/symfony-rr:8.4-dev`
 
 Также публикуются теги:
 
@@ -62,7 +62,7 @@ Workflow запускается:
 ```yaml
 services:
   api:
-    image: ghcr.io/<owner>/symfony-rr:8.4-dev
+    image: ghcr.io/astro-masters/symfony-rr:8.4-dev
     working_dir: /var/www/api
     volumes:
       - ./api:/var/www/api
@@ -73,7 +73,7 @@ services:
 ```yaml
 services:
   api:
-    image: ghcr.io/<owner>/symfony-rr:8.4-prod
+    image: ghcr.io/astro-masters/symfony-rr:8.4-prod
 ```
 
 ## Рекомендация для production-проектов
@@ -81,7 +81,7 @@ services:
 Для production лучше собирать проектный образ на базе `8.4-prod`:
 
 ```dockerfile
-FROM ghcr.io/<owner>/symfony-rr:8.4-prod
+FROM ghcr.io/astro-masters/symfony-rr:8.4-prod
 
 COPY ./api /var/www/api
 ```
