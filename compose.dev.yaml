@@ -1,0 +1,22 @@
+services:
+  api:
+    image: ${API_BASE_DEV_IMAGE:-ghcr.io/${GHCR_OWNER}/symfony-rr:8.4-dev}
+    working_dir: /var/www/api
+    env_file:
+      - ./.env
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG:-serverName=symfony-rr}
+      XDEBUG_MODE: ${XDEBUG_MODE:-debug,develop}
+      XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-host.docker.internal}
+      XDEBUG_CLIENT_PORT: ${XDEBUG_CLIENT_PORT:-9003}
+      XDEBUG_IDEKEY: ${XDEBUG_IDEKEY:-PHPSTORM}
+      XDEBUG_CONFIG: client_host=${XDEBUG_CLIENT_HOST:-host.docker.internal} client_port=${XDEBUG_CLIENT_PORT:-9003} idekey=${XDEBUG_IDEKEY:-PHPSTORM}
+    volumes:
+      - ./api:/var/www/api:delegated
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    command:
+      - sh
+      - /usr/local/bin/start.sh
