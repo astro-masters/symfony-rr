@@ -9,6 +9,11 @@
 - `ghcr.io/astro-masters/symfony-rr:8.4-prod`
 - `ghcr.io/astro-masters/symfony-rr:8.4-dev`
 
+Образы публикуются для архитектур:
+
+- `linux/amd64`
+- `linux/arm64`
+
 Также публикуются теги:
 
 - `sha-<commit>-prod`
