@@ -1,7 +1,9 @@
+ARG PHP_VERSION=8.4
+
 FROM ghcr.io/roadrunner-server/roadrunner:2025.1.14 AS roadrunner
 FROM composer:2 AS composer
 
-FROM php:8.4-cli AS base
+FROM php:${PHP_VERSION}-cli AS base
 
 ARG APP_UID=1000
 ARG APP_GID=1000
@@ -50,7 +52,6 @@ RUN set -eux; \
       xsl \
       xml \
       soap \
-      opcache \
       pcntl \
       sockets \
       mbstring \
