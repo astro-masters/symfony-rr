@@ -22,6 +22,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        php_version:
+          - '8.4'
+          - '8.5'
         target:
           - prod
           - dev
@@ -48,20 +51,24 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=8.4-${{ matrix.target }},enable={{is_default_branch}}
-            type=raw,value=sha-${{ github.sha }}-${{ matrix.target }}
-            type=ref,event=tag,suffix=-${{ matrix.target }}
+            type=raw,value=${{ matrix.php_version }}-${{ matrix.target }},enable={{is_default_branch}}
+            type=raw,value=sha-${{ github.sha }}-${{ matrix.php_version }}-${{ matrix.target }}
+            type=ref,event=tag,suffix=-${{ matrix.php_version }}-${{ matrix.target }}
+            type=raw,value=sha-${{ github.sha }}-${{ matrix.target }},enable=${{ matrix.php_version == '8.4' }}
+            type=ref,event=tag,suffix=-${{ matrix.target }},enable=${{ matrix.php_version == '8.4' }}
 
-      - name: Build and push ${{ matrix.target }} image
+      - name: Build and push PHP ${{ matrix.php_version }} ${{ matrix.target }} image
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
           target: ${{ matrix.target }}
+          build-args: |
+            PHP_VERSION=${{ matrix.php_version }}
           platforms: linux/amd64,linux/arm64
           push: true
           pull: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ matrix.target }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+          cache-from: type=gha,scope=php-${{ matrix.php_version }}-${{ matrix.target }}
+          cache-to: type=gha,mode=max,scope=php-${{ matrix.php_version }}-${{ matrix.target }}

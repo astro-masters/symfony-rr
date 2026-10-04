@@ -1,13 +1,15 @@
 # symfony-rr
 
-Базовые Docker-образы для `PHP 8.4 + Symfony + RoadRunner`.
+Базовые Docker-образы для `PHP 8.4/8.5 + Symfony + RoadRunner`.
 
 ## Что публикуется
 
-В GHCR публикуются два target-образа из одного `Dockerfile`:
+В GHCR публикуются `dev` и `prod` образы для каждой поддерживаемой версии PHP:
 
 - `ghcr.io/astro-masters/symfony-rr:8.4-prod`
 - `ghcr.io/astro-masters/symfony-rr:8.4-dev`
+- `ghcr.io/astro-masters/symfony-rr:8.5-prod`
+- `ghcr.io/astro-masters/symfony-rr:8.5-dev`
 
 Образы публикуются для архитектур:
 
@@ -15,6 +17,17 @@
 - `linux/arm64`
 
 Также публикуются теги:
+
+- `sha-<commit>-8.4-prod`
+- `sha-<commit>-8.4-dev`
+- `sha-<commit>-8.5-prod`
+- `sha-<commit>-8.5-dev`
+- `vX.Y.Z-8.4-prod`
+- `vX.Y.Z-8.4-dev`
+- `vX.Y.Z-8.5-prod`
+- `vX.Y.Z-8.5-dev`
+
+Для обратной совместимости PHP 8.4 также получает прежние теги:
 
 - `sha-<commit>-prod`
 - `sha-<commit>-dev`
@@ -25,7 +38,7 @@
 
 ### prod
 
-- `php:8.4-cli`
+- `php:8.4-cli` или `php:8.5-cli`
 - RoadRunner
 - Composer
 - системные библиотеки
@@ -73,6 +86,17 @@ services:
       - ./api:/var/www/api
 ```
 
+Для PHP 8.5 укажите соответствующий тег:
+
+```yaml
+services:
+  api:
+    image: ghcr.io/astro-masters/symfony-rr:8.5-dev
+    working_dir: /var/www/api
+    volumes:
+      - ./api:/var/www/api
+```
+
 ### prod base
 
 ```yaml
@@ -81,12 +105,22 @@ services:
     image: ghcr.io/astro-masters/symfony-rr:8.4-prod
 ```
 
+Для PHP 8.5:
+
+```yaml
+services:
+  api:
+    image: ghcr.io/astro-masters/symfony-rr:8.5-prod
+```
+
 ## Рекомендация для production-проектов
 
-Для production лучше собирать проектный образ на базе `8.4-prod`:
+Для production лучше собирать проектный образ на базе нужной версии PHP:
 
 ```dockerfile
-FROM ghcr.io/astro-masters/symfony-rr:8.4-prod
+ARG PHP_VERSION=8.5
+
+FROM ghcr.io/astro-masters/symfony-rr:${PHP_VERSION}-prod
 
 COPY ./api /var/www/api
 ```
@@ -96,11 +130,13 @@ COPY ./api /var/www/api
 ### dev
 
 ```bash
-docker build --target dev -t symfony-rr:dev .
+docker build --build-arg PHP_VERSION=8.4 --target dev -t symfony-rr:8.4-dev .
+docker build --build-arg PHP_VERSION=8.5 --target dev -t symfony-rr:8.5-dev .
 ```
 
 ### prod
 
 ```bash
-docker build --target prod -t symfony-rr:prod .
+docker build --build-arg PHP_VERSION=8.4 --target prod -t symfony-rr:8.4-prod .
+docker build --build-arg PHP_VERSION=8.5 --target prod -t symfony-rr:8.5-prod .
 ```
