@@ -38,7 +38,7 @@
 
 ### prod
 
-- `php:8.4-cli` или `php:8.5-cli`
+- `php:8.4.27-cli` или `php:8.5.12-cli`
 - RoadRunner
 - Composer
 - системные библиотеки
@@ -61,6 +61,11 @@
 ## Публикация
 
 Образы публикуются GitHub Actions workflow-ом `.github/workflows/publish.yml`.
+
+Версии PHP для сборки закреплены в матрице workflow: 8.4.27 и 8.5.12.
+При следующем обновлении безопасности меняйте их в матрице и значение
+`PHP_VERSION` по умолчанию в `Dockerfile`. Публичные теги `8.4-*` и `8.5-*`
+при этом сохраняются.
 
 Workflow запускается:
 
@@ -130,13 +135,13 @@ COPY ./api /var/www/api
 ### dev
 
 ```bash
-docker build --build-arg PHP_VERSION=8.4 --target dev -t symfony-rr:8.4-dev .
-docker build --build-arg PHP_VERSION=8.5 --target dev -t symfony-rr:8.5-dev .
+docker build --pull --build-arg PHP_VERSION=8.4.27 --target dev -t symfony-rr:8.4-dev .
+docker build --pull --build-arg PHP_VERSION=8.5.12 --target dev -t symfony-rr:8.5-dev .
 ```
 
 ### prod
 
 ```bash
-docker build --build-arg PHP_VERSION=8.4 --target prod -t symfony-rr:8.4-prod .
-docker build --build-arg PHP_VERSION=8.5 --target prod -t symfony-rr:8.5-prod .
+docker build --pull --build-arg PHP_VERSION=8.4.27 --target prod -t symfony-rr:8.4-prod .
+docker build --pull --build-arg PHP_VERSION=8.5.12 --target prod -t symfony-rr:8.5-prod .
 ```

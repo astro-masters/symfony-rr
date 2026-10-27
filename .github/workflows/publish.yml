@@ -28,6 +28,11 @@ jobs:
         target:
           - prod
           - dev
+        include:
+          - php_version: '8.4'
+            php_patch_version: '8.4.27'
+          - php_version: '8.5'
+            php_patch_version: '8.5.12'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -64,7 +69,7 @@ jobs:
           file: ./Dockerfile
           target: ${{ matrix.target }}
           build-args: |
-            PHP_VERSION=${{ matrix.php_version }}
+            PHP_VERSION=${{ matrix.php_patch_version }}
           platforms: linux/amd64,linux/arm64
           push: true
           pull: true

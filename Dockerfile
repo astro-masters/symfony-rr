@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.4
+ARG PHP_VERSION=8.4.27
 
 FROM ghcr.io/roadrunner-server/roadrunner:2025.1.14 AS roadrunner
 FROM composer:2 AS composer
